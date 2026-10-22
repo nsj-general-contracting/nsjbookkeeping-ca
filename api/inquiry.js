@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
   const text=['New website bookkeeping inquiry','',`Name: ${fields.name}`,`Email: ${fields.email}`,`Business: ${fields.business||'Not provided'}`,`City / town: ${fields.city||'Not provided'}`,`Service: ${fields.service}`,'',fields.message||'No additional message.','','Source: https://www.nsjbookkeeping.ca/'].join('\n');
   const id=createHash('sha256').update(JSON.stringify(fields)+Math.floor(Date.now()/300000)).digest('hex');
   try {
-    const response=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${process.env.RESEND_API_KEY}`,'Content-Type':'application/json','Idempotency-Key':`nsj-inquiry-${id}`},body:JSON.stringify({from:process.env.RESEND_FROM,to:['nsjfinancialservices@gmail.com'],reply_to:fields.email,subject:`New bookkeeping inquiry: ${fields.service}`,text}),signal:AbortSignal.timeout(12000)});
+    const response=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${process.env.RESEND_API_KEY}`,'Content-Type':'application/json','Idempotency-Key':`nsj-inquiry-${id}`},body:JSON.stringify({from:process.env.RESEND_FROM,to:['nsjbookkeeping22@gmail.com'],reply_to:fields.email,subject:`New bookkeeping inquiry: ${fields.service}`,text}),signal:AbortSignal.timeout(12000)});
     const result=await response.json();
     if(!response.ok||!result.id)return res.status(502).json({success:false});
     return res.status(200).json({success:true});
